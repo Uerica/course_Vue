@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>生命週期</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{a}}</p>
+        <button v-on:click="a++">add</button>
+        <button v-on:click="$destroy()">destroy instance</button>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1
+            },
+            beforeCreate(){
+                console.log('Hook: beforeCreate'); //實體還沒創建，所以 a 跟 $el 都是 undefined 
+                console.log(`this.a: ${this.a}`); //this.a: undefined
+                console.log(`this.$el: ${this.$el}`); //this.$el: undefined
+            },
+            created(){
+                console.log('Hook: created'); //已經創建實例，所以 a 已變為 1 ，但是 $el 因為還未掛載至目標元素，所以依然是 undefined 。
+                console.log(`this.a: ${this.a}`); //this.a: 1
+                console.log(`this.$el: ${this.$el}`); //this.$el: undefined
+            },
+            beforeMount() {
+                console.log('Hook: beforeMount'); //在此前都不能操作DOM元素
+                console.log(this.$el.outerHTML); //<div id="app"><p>{{a}}</p></div> 模板語法未被轉換
+            },
+            mounted() {
+                console.log('Hook: mounted');
+                console.log(this.$el.outerHTML);//<div id="app"><p>1</p></div> 已轉換
+            },
+            beforeUpdate() {
+                console.log('Hook: beforeUpdate'); //按按鈕觸發資料更新
+                console.log(` this.a: ${this.a}`);  //this.a: 2 資料已更新
+                console.log(this.$el.outerHTML); //<div id="app"><p>1</p> <button>add</button></div> 畫面尚未更新
+            },
+            updated() {
+                console.log('Hook: updated'); //updated 時盡量避免修改 data ，這樣有可能再次觸發 update 造成無限循環
+                console.log(` this.a: ${this.a}`); //this.a: 2 資料已更新
+                console.log(this.$el.outerHTML); //<div id="app"><p>2</p> <button>add</button></div> 畫面更新
+            },
+            beforeDestroy() { //表示即將執行銷毀動作，如果有些物件要釋放資源可以在這處理。
+                console.log('Hook: beforeDestroy'); 
+                console.log();
+            },
+            destroyed() { // 叫用 destroyed 時，實體已經銷毀。
+                console.log('Hook: destroyed');
+                console.log();
+            }
+
+        })
+    </script>
+</body>
+</html>

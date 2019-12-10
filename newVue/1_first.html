@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>new Vue</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <!-- vue模板內 實現:點按按鈕更改畫面文字-->
+    <div id="app">
+        <p>{{message}}</p>
+        <button v-on:click="getRemoteMessage">Inside Button</button>   <!-- 1. Click Button -->
+    </div>
+
+    <!-- vue模板外 實現:點按按鈕更改vue模板中的畫面文字-->
+    <button onclick="clickButton()">Outside Button</button>   <!-- 1. Click Button -->
+    
+    <script>
+        // vue實例
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: "嗨, 點看看會怎樣", //畫面文字綁定
+            },
+            methods: {
+                getRemoteMessage() {    // 2. trigger event in Vue instance
+                    Promise.resolve("使用this.message更改裡面的文字") // 3. Get data asynchronously
+                        .then((res) => {    // 4. Return result
+                            this.message = res; // 5. 使用this.message更改裡面的文字
+                        });
+                },
+            },
+        });
+
+        function clickButton() {    // 2. trigger event in Vue instance
+            Promise.resolve("使用vm.message更改裡面的文字") // 3. Get data asynchronously
+                .then((res) => {    // 4. Return result
+                    vm.message = res; // 5.使用vm.message更改裡面的文字 vm代表寫vue實例的物件
+                });
+        }
+    </script>
+</body>
+</html>

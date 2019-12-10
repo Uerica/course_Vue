@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>mustache標籤</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Mustache 標籤{{}}會將實體上的 a 屬性值放到對應的 DOM 上，並且在每次 a 的值變化後會 re-render 頁面 -->
+        <p>{{a}}</p>
+        <!-- 加上 v-once 這個 directive 可以讓 Mustache 標籤只渲染一次 -->
+        <p v-once>render once: {{a}}</p>
+
+        <!-- JavaScript 的陳述式 -->
+        <!-- Mustache 的 JavaScript 陳述式雖然好用，但是由於不可復用及較差的可讀性，通常在開發時會用 computed 或是 methods 取代 -->
+        <div>plus one: {{a + 1}}</div>
+        <div>ternary expressions: {{a % 2 === 0 ? 'even' : 'odd'}}</div>  
+        <div>length: {{a.toString().length}}</div>
+        <div>Math.pow2: {{Math.pow(a, 2)}}</div>
+            
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1
+            },
+            created(){
+                setInterval(()=>{
+                    this.a++;
+                },2000);
+            }
+        })
+    </script>
+</body>
+</html>

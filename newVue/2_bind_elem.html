@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>綁定元素</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <div id="app">
+        element: {{a}}
+    </div>
+    <div id="app2">
+        element: {{a}}
+    </div>
+    <div id="app3">
+        element: {{a}}
+    </div>
+
+    <script>
+    
+        //使用data中綁定
+      var vm = new Vue({
+          el:"#app",
+          data:{
+              a:1
+          }
+      })
+
+      //使用template
+      var vm2 = new Vue({
+          el:"#app2",
+          template:'<p>template:{{a}}</p>',
+          data:{
+              a:1
+          }
+      })
+
+      //** 選項中有設置 render 函式時，使用 Render Function 配置模板:
+      var vm3 = new Vue(
+    {
+        el: "#app3",
+        render(h) {
+            return h(
+                'div',
+                {
+                    'class': {
+                        render: true
+                    }
+                },
+                `render: ${this.a}`
+            )
+        },
+        data: {
+            a: 1
+        },
+    }
+);
+
+
+    </script>
+</body>
+</html>

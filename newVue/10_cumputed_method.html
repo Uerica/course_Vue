@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>computed methods比較</title>
+</head>
+<body>
+    <div id="app">
+            <div>
+                <span>Number {{num}} is {{evenOrOdd()}}</span>
+                <button @click = "num++">++</button>
+                <p>{{datePlusNumberComputed}}</p>
+                <p>{{datePlusNumberMethod()}}</p>
+            </div>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                num: 1
+            },
+            computed: { //按下按鈕跟此fn無關, 也沒有資料傳入此fn, 所以畫面資料都不改變
+                datePlusNumberComputed() {
+                    return Date.now();
+                }
+            },
+            methods: { //按下按鈕後因為畫面重新渲染, 所以methods會再被呼叫一次
+                evenOrOdd(){
+                    return this.num % 2 === 0 ? 'even' : 'odd';
+                },
+                datePlusNumberMethod() {
+                    return Date.now();
+                }
+            }
+        })
+
+        //如果fn是用在需要因應資料改變, 那就使用計算屬性, 如果需要每次都被呼叫, 就用methods
+    </script>
+</body>
+</html>

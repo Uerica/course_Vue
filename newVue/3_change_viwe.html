@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>改變畫面</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{a}}</p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a:1
+            }
+        })
+        console.log(vm.$data.a);//像是 $data 這種有前綴 $ 的屬性是 Vue 實例所配置的，有前綴是為了跟使用者定義的屬性作區別
+        vm.$data.a = "hihi"; //直接對修改 $data, Vue 就會重新渲染畫面造成變化
+        vm.a = 999; //寫vm.a也有一樣效果
+    </script>
+</body>
+</html>

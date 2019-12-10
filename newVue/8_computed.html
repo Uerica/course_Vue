@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>computed計算屬性</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="num++">++</button>
+        <button @click="num--">--</button>
+        <!-- 使用js表達式寫法 1.可讀性低 2.無法複用 -->
+        <p>Number {{num}} is {{num % 2 === 0? 'even' : 'odd'}}</p> 
+        <!-- 改成使用computed -->
+        <p>Number {{num}} is {{numEvenOrOdd}}</p>
+        <p>{{numberEvenOrOddArrow}}</p>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                num: 1
+            },
+            //計算屬性都是一個具有回傳值且沒有傳入參數的fn
+            //this一定會指向vue物件
+            //在模板中直接以fn名稱設置，不用加 ()
+            //可以從 Mustache 標籤中的引用方式得知，計算屬性跟一般的資料屬性一樣放於 Vue 物件中
+            computed:{
+                numEvenOrOdd(){
+                   return this.num % 2 === 0? 'even' : 'odd';
+                },
+                
+                //箭頭函式寫法
+                //計算屬性的函數會傳入一個 vm 的參數，這個參數會是 Vue 的實體，也就是原本使用的 this
+                numberEvenOrOddArrow: vm => vm.num % 2 === 0 ? 'even' : 'odd',
+            },
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>getter,setter</title>
+</head>
+<body>
+    <div id="app">
+        <!-- getter,setter寫法 -->
+        <div>
+            <span>Number {{num}} is {{numberEvenOrOddSetter}}</span>
+            <button @click="numberEvenOrOddSetter='even'">偶偶</button>
+            <button @click="numberEvenOrOddSetter='odd'">奇奇</button>
+        </div>
+    </div>
+
+    <script>
+         var vm = new Vue({
+            el:"#app",
+            data:{
+                num: 11
+            },
+            computed:{
+                numberEvenOrOddSetter: {
+                    get() {
+                        return this.num % 2 === 0 ? '偶數' : '奇數'; //在這裡先回傳畫面上的變化
+                    },
+                    set(evenOrOdd) { //點案按鈕帶入參數做判斷
+                        if(this.num % 2 === 0){
+                            if(evenOrOdd !== 'even') this.num++;
+                        }
+                        if(evenOrOdd !== 'odd') this.num++;
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+</html>

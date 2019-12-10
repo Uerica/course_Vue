@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>directives</title>
+</head>
+<body>
+    <div id="app">
+        <!-- directives的設定會影響 DOM 本身，使 DOM 元素因響應造成 Attributes 或是渲染上的變化。 -->
+        <!-- 都會以 v- 為前綴字 -->
+        <h3>Directive</h3>
+        <button v-on:click="a++">+</button>
+        <hr></hr>
+
+        <!-- **v-html** -->
+        <h3>Directive="Value"</h3>
+        <!-- Mustache 標籤會將 html 資料當作字串輸出。 -->
+        <div>{{html}}</div>
+        <!-- v-html="html" : 它會將 html 資料設置給此元素( <div> )的 innerHTML -->
+        <div v-html="html"></div>
+        <hr></hr>
+
+        <!-- **v-if** -->
+        <div v-if="condition">render</div>
+        <div v-if="!condition">never render</div>
+        <hr></hr>
+
+        <!-- **v-bind** -->
+        <h3>Directive:Argument="Value"</h3>
+        <!-- 要綁定像是 name 、 id 等的元素 Attributes ，需要使用 v-bind -->
+        <div v-bind:id="id">Bind Directives</div>
+        <button v-bind:disabled='isDisabled'>I am disabled</button>
+        <hr></hr>
+
+        <!-- 綁定事件 -->
+        <h3>Directive:Argument.Modifier="Value"</h3>
+        <span>{{b}}</span>
+        <!-- once代表只能執行一次 -->
+        <button v-on:click.once='click'>b--</button>
+
+        <!-- v-bind 縮寫 : -->
+        <!-- 一般寫法 -->
+        <button v-bind:disabled='isDisabled'>I am disabled</button>
+        <!-- 簡寫 -->
+        <button :disabled='isDisabled'>I am disabled</button>
+
+        <!-- v-bind 縮寫 @ -->
+        <!-- 一般寫法 -->
+        <button v-on:click.once='click'>b--</button>
+        <!-- 簡寫 -->
+        <button @click.once='click'>b--</button>
+
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1,
+                html:'<h1>hihiyoyo</h1>',
+                condition:true,
+                id:"sss",
+                isDisabled:true,
+                b: 10,
+            },
+            methods:{
+                click(){
+                    this.b--;
+                },
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>vue的this</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{meg}}</p>
+        <p>{{b}}</p>
+        <button @click="add">add</button>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                meg:1,
+                b:1
+            },
+            methods: {
+                add(){
+                    this.meg += 1; //不能使用箭頭函式, 因為箭頭函式無法動態綁定且會依據父層this表現
+                }
+            }
+        });
+
+        vm.meg = 2;
+        vm.$watch('meg',function(newValue ,oldValue){ //watch可帶入新舊值參數
+            this.b = oldValue;
+        })
+    </script>
+</body>
+</html>
