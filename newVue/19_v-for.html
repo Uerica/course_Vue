@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>v-for</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 可直接使用 -->
+        <div v-for="item in items">{{item}}</div>
+        <p></p>
+        <!-- 可帶入其他資料 -->
+        <div v-for="item in items">{{itemtxt}} is {{item}}</div>
+        <p></p>
+        <!-- 可使用物件 -->
+        <div v-for="item in objItem">{{item.name}} is {{item.num}}</div>
+        <p></p>
+        <!-- 還可以使用index參數~ -->
+        <div v-for="(item,index) in items">{{itemtxt}} is {{index}} : {{item}}</div>
+        <p></p>
+        <div v-for="(item,index) in items">{{itemtxt}} is {{index}} : {{item[0]}}</div>
+        <p></p>
+        <div v-for="(item,index) in items">{{itemtxt}} is {{index}} : {{item.length}}</div>
+
+        <p>使用of</p>
+        <div v-for="item of items">{{item}}</div>
+        <p></p>
+        <div v-for="item of items">{{itemtxt}} is {{item}}</div>
+        <p></p>
+        <div v-for="item of objItem">{{item.name}} is {{item.num}}</div>
+        <p></p>
+        <div v-for="(item,index) of items">{{itemtxt}} is {{index}} : {{item.length}}</div>
+
+        <p>物件只顯示value</p>
+        <div v-for="item of obj">{{item}}</div>
+        <p>三個參數value, key, index</p>
+        <li v-for="(value, key, index) in obj">第{{index}}個, {{key}} 是 {{value}}</li>
+        <p>物件v for key順序跟我寫得不同</p>
+        <div v-for="(value, key, index) of obj2"> {{key}}:{{value}}</div>
+        <p></p>
+        <h2>快速產生數列 n in 10</h2>
+        <div v-for="n in 10">{{n}}</div>
+        <p></p>
+        <p> key 屬性可以讓 vue 有個依據來辨識每個節點, 重新渲染, 因此在使用 v-for 的時候最好為每個節點加上 key 屬性, 並且每個節點的 key 值最好是唯一的</p>
+        <div v-for="item in objItem" :key="item.number">Eng: {{item.name}}, Number: {{item.num}}</div>
+        <p></p>
+        <p>v-for 跟 v-if 一起用 v-for優先權較高</p>
+        <div v-for="(item, index) in items" v-if="index > 0">{{ itemtxt}} is {{index}} : {{item}}</div>
+        
+        <h3>在"template"標籤中使用v-for</h3>
+        <ul>
+            <template v-for="item of objItem">
+            <li>Eng:{{item.name}}</li>
+            <li>Num:{{item.num}}</li>
+            </template>
+        </ul>
+        <ul>
+            <li v-for="item in sortedObjItems">{{item.name}}
+                <ul>
+                    <li v-for="point in oddPoints(item.points)">{{point.name}}</li>
+                </ul>
+            </li>
+        </ul>
+        
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                items: ['RouRou','Joe','QuQu'],
+                itemtxt: 'name',
+                objItem:[
+                    {name:'one',num:'1'},
+                    {name:'two',num:'2'},
+                    {name:'three',num:'3'},
+                ],
+                obj:{
+                    mama:'RouRou',
+                    papa:'Joe',
+                    doggo:'QuQu'
+                },
+                obj2:{
+                    2: 'h',
+                    7: 't',
+                    1: 'k'
+                },
+                objItems: [
+                    {name: 'one', number: 1, points: [
+                        {name: 'oneone', number: 11},
+                        {name: 'onetwo', number: 12},
+                        {name: 'onethree', number: 13}
+                    ]},
+                    {name: 'two', number: 2, points: [
+                        {name: 'twoone', number: 21},
+                        {name: 'twotwo', number: 22},
+                        {name: 'twothree', number: 23}
+                    ]},
+                    {name: 'three', number: 3, points: [
+                        {name: 'threeone', number: 31},
+                        {name: 'threetwo', number: 32},
+                        {name: 'threethree', number: 33}
+                    ]},
+                ]
+            },
+            computed:{ //反序
+                sortedObjItems() {
+                    return this.objItems.reverse();
+                }
+            },
+            methods: {
+                oddPoints(points) {
+                    return points.filter(point => point.number % 2 !== 0);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

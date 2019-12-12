@@ -8,15 +8,37 @@
 </head>
 <body>
     <div id="app">
-        <button @click="isA = !isA">toggle</button>
-        <span v-if="isA">A</span>
+        <span>isA:{{isA}}</span>
+        <button @click="isA = !isA">toggle A</button>
+        <br>
+        <span>isB:{{isB}}</span>
+        <button @click="isB = !isB">toggle B</button>
+        <br>
+        <!-- 如果A是true -->
+        <template v-if="isA">
+            <span>show A</span>
+        </template>
+        <!-- 或者B是true -->
+        <span v-else-if="isB">show B</span>
+        <!-- 或者兩者都不是 -->
+        <span v-else>not A not B</span>
+        <!-- v-else-if 跟 v-else 相同必須緊跟在 v-if 或是 v-else-if 設置元素之後，而且必須是同一層的元素。 -->
+        <br>
+        <!-- vue 的條件渲染非常的聰明，它會去判斷條件改變前及改變後的元素配置是否相同，如果是相同的結構則會繼續沿用原本的 DOM 元素，並不會重新渲染，用這個方法減少重渲染所需的花費，提高效能。 -->
+        <input type="text" v-if="isA" name="a">
+        <input type="text" v-else name="notA">
+        <!-- vue 這樣的做法雖然提高了效率，但有時的情境會真的希望重新渲染整個元素
+        為此 vue 提供了一個 key 屬性，當條件渲染判斷是否復用元素時，會去觀察 key 屬性是否相同，如果元素相同且 key 屬性值也相同，則會沿用原本的元素，如果 key 不同則會重新渲染。 -->
+        <input type="text" v-if="isA" name="a" key="a">
+        <input type="text" v-else name="notA" key="notA">
     </div>
 
     <script>
         var vm = new Vue({
             el:"#app",
             data:{
-                isA: true
+                isA: true,
+                isB: true
             }
         })
     </script>

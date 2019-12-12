@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>v-show</title>
+</head>
+<body>
+    <div id="app">
+        <span>isA:{{isA}}</span>
+        <button @click="isA = !isA">toggle A</button>
+        <!-- display: none; -->
+        <div v-show="isA">A</div>
+        <!-- 因為 v-show 只是單純的加上 display 樣式，因此它不能使用在 <template> 這個不顯示的元素 -->
+        <template v-show="isA">
+            <div>我是用template的A,會錯喔!</div>
+        </template>        
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                isA: true,
+            }
+        })
+        //v-if vs v-show
+        //v-if 在條件不符合時不會渲染元素，但 v-show 不管是否符合都會渲染元素，
+        //因此 v-show 在不頻繁切換顯示時會耗費較多的資源，例如一個元素的判斷在建立實體時就已經決定，
+        //但如果判斷為不顯示的話 v-if 就不會渲染元素，但 v-show 會渲染元素。
+        //v-if 在每次判斷改變的時候都會建立或是消滅元素，而 v-show 只是修改 display 樣式而已，
+        //因此 v-if 在切換頻繁的情況下，會較 v-show 耗費較多的資源。
+    </script>
+</body>
+</html>
