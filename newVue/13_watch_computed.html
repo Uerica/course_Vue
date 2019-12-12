@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>watch & computed比較</title>
+</head>
+<body>
+    <div id="app">
+        <h3>計算屬性</h3>
+        <p>a:{{a}}</p>
+        <p>b:{{b}}</p>
+        <p>aplusb:{{aplusb}}</p>
+
+        <h3>watch寫法</h3>
+        <p>watchA:{{watchA}}</p>
+        <p>b:{{watchB}}</p>
+        <p>aplusb:{{watchAplusB}}</p>
+
+        <h3>非同步</h3>
+        <p>{{asyncSource}}</p>
+        <p>{{asyncData}}</p>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data:{
+                a: -9,
+                b: 13,
+                watchA: -8,
+                watchB: 77,
+                watchAplusB: 0,
+                asyncSource: 0,
+                asyncData: null
+            },
+            //計算屬性在處理資料連動時有個很大的優勢，單個計算屬性就可以監聽多個資料變化
+            computed:{
+                aplusb(){
+                    return this.a + this.b;
+                }
+            },
+            watch: {
+            //     //watch多個寫法較繁瑣
+            //     watchA:{
+            //         handler: function(val) {
+            //             this.watchAplusB = val + this.watchB;
+            //         },
+            //         immediate: true
+            //     },
+            //     watchB:{
+            //         handler: function(val) {
+            //             this.watchAplusB = val + this.watchA;
+            //         },
+            //         immediate: true
+            //     },
+
+            //watch適用場景
+            //(1)與資料連棟無關
+            a: function(val) {
+                this.recordLog('a', val);
+                },
+
+            //(2)非同步處理
+            asyncSource: {
+                handler: function(val){
+                    Promise.resolve(val*2).then((res) => {
+                        this.asyncData = res;
+                    });
+                },
+                    immediate: true
+                }
+            },
+
+            //如果要監聽多個就使用 $watch 替代 watch 解法
+            //$watch 的監聽對象可以是函數，因此也可以像是計算屬性一樣監聽多個值的變化
+            created() {
+                this.$watch(function() {
+                    return this. watchA + this. watchB;
+                }, function(val) {
+                    this. watchAplusB = val;
+                },{
+                    immediate: true
+                });
+            }
+        });
+    </script>
+</body>
+</html>

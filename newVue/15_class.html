@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>new Vue</title>
+    <style>
+    .red {
+        color: red;
+    }
+
+    .blue {
+        color: blue;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <div id="app">
+            <div>
+                <h3>陣列方法</h3>
+                <span :class="[arrColor, 'bold']">Array Class</span>
+                <button @click="changeArrColor">change color</button>
+            </div>
+            <div>
+                <h3>計算屬性寫法</h3>
+                <span :class="objClass">Object Class</span>
+                <button @click="changeObjColor">change color</button>
+            </div>
+            <div>
+                <h3>以物件綁定 Class 的 Key 、 Value 設置方式</h3>
+                <!-- Value : 是否輸出此 Class 的條件式，只要是 Truthy 就會輸出。 -->
+                <span :class="[{red: objColor === 'red', blue: objColor === 'blue', bold: true}, 'bold']">Object in Array Class</span>    
+                <button @click="changeObjColor">change color</button>
+            </div>
+            </div>
+   
+
+    <script>
+       var vm = new Vue({
+            el: '#app',
+            data: {
+                activeA: false,
+                activeB: false,
+                activeC: false,
+                inlineClass: "red bold",
+                arrColor: 'red',
+                objColor: 'red'
+            },
+            //將物件放進計算屬性中
+            //在模板上應該盡量避免撰寫複雜的 JavaScript 代碼，所以如果判斷方式過於複雜，可以將邏輯抽到計算屬性中。
+            computed: {
+                objClass() {
+                return {
+                    red: this.objColor === 'red', 
+                    blue: this.objColor === 'blue', 
+                    bold: true
+                };
+                }
+            },
+            methods: {
+                changeArrColor() {
+                    this.arrColor = this.arrColor === 'red' ? 'blue' : 'red';
+                },
+                changeObjColor() {
+                    this.objColor = this.objColor === 'red' ? 'blue' : 'red';
+                }
+            }
+            });
+    </script>
+</body>
+</html>

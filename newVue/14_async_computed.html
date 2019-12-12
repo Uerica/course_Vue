@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <!-- 使用 vue-async-computed 這個第三方工具，我們可以輕鬆的在計算屬性中使用非同步的方式取得資料。 -->
+    <script src="https://unpkg.com/vue-async-computed"></script>
+    <title>computed非同步取得資料</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{asyncSource}}</p>
+        <p>{{asyncData}}</p>
+    </div>
+
+    <script>
+        Vue.use(AsyncComputed);
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                asyncSource: 5,
+                // asyncData: null
+            },
+            asyncComputed: {
+                asyncData: function() {
+                return Promise.resolve(this.asyncSource*2);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

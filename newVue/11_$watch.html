@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>$watch 監聽器</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="unwatchNFuncA">unwatch A</button>
+        <button @click = "a++">A++</button>
+        <button @click = "a--">A--</button>
+        <div>a:{{a}}</div>
+        <div>changed: {{newA}}</div>
+        <div>before change: {{oldA}}</div>
+
+    <div>
+        <button @click="b.c.d++">+</button>
+        <button @click="b.c.d--">-</button>
+        <div>b.c.d: {{b.c.d}}</div>
+        <div>changed: {{newD}}</div>
+        <div>before change: {{oldD}}</div>
+        <button @click="b.c.e++">+</button>
+        <button @click="b.c.e--">-</button>
+        <div>b.c.e: {{b.c.e}}</div>
+        <div>changed b: {{newB}}</div>
+        <div>before change b: {{oldB}}</div>
+
+        <div>
+            f: {{f}}
+            <button @click="f++">+</button>
+            <button @click="f--">-</button>
+          </div>
+          <div>
+            g: {{g}}
+            <button @click="g++">+</button>
+            <button @click="g--">-</button>
+          </div>
+          <div>f + g: {{fPlusg}}</div>
+        </div>
+        <hr>
+        <div>
+            <div>
+                <button @click="unwatchNFunc">unwatch n</button>
+                n: {{n}}
+                <button @click="n++">+</button>
+                <button @click="n--">-</button>
+            </div>
+            zeroToNArr: {{zeroToNArr}}
+        </div>
+    </div>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1,
+                newA: 0,
+                oldA: 0,
+                b:{
+                    c:{
+                        d:1,
+                        e:1,
+                    }
+                },
+                newD: 0,
+                oldD: 0,     
+                newB: {},
+                oldB: {},
+                
+                f: 1,
+                g: 1,
+                fPlusg: 0,
+
+                n: 10,
+                zeroToNArr: [], //如果不加created, 初始化會是[]
+                unwatchNFunc: () => {}, //立即執行
+                unwatchNFuncA: () => {}, //立即執行
+            },
+            // created() {
+            //     //(new Array(this.n + 1)[length], (val, index) => index)
+            //     this.zeroToNArr = Array.from(new Array(this.n + 1), (val, index) => index); //[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+            // }
+        });
+
+        //Vue 提供了監聽器$watch，當資料變化時叫用函數
+        //函數會有兩個傳入參數:改變後的值,改變前的值。
+        // vm.$watch('a',function(newA,oldA){
+        //     this.newA = newA; //把改變後的值放到newA
+        //     this.oldA = oldA; //把改變前的值放到oldA
+        // })
+        
+        //監聽以.分隔表達式
+        //這次監聽的值在物件裡面，使用表達式 b.c.d 就可以監聽 d 屬性
+        vm.$watch('b.c.d',function(newD,oldD){
+            this.newD = newD;
+            this.oldD = oldD;
+        })
+
+        //監聽物件下的各個屬性值
+        //假設有個需求是只要物件下的其中一個屬性值改變，就要觸發監聽器，
+        //為此需要在 $watch 的第三個參數 [options] 加上 deep: true 的設定，讓監聽器知道要監聽下層的屬性。
+        vm.$watch('b', function(newB, oldB) {
+            this.newB = newB;
+            this.oldB = oldB;
+        }, {
+            deep: true //打開才會去找物件下方的物件
+        });
+
+        //**如果要監聽複雜的表達式，使用函數來設定目標。
+        vm.$watch(function() {
+            return this.f + this.g;
+        }, function(fPlusg) {
+            this.fPlusg = fPlusg;
+        });
+
+        //實體初始化時叫用監聽器
+        // vm.$watch('n', function() {
+        //     this.zeroToNArr = Array.from(new Array(this.n + 1), (val, index) => index);
+        //     },{
+        //         immediate:true //取代created
+        //     });
+
+        //註銷監聽, 使用$watch的fn給的回傳值來註銷
+        vm.unwatchNFunc = vm.$watch('n', function() {
+        // [0, 1, 2, 3..., n]
+            this.zeroToNArr = Array.from(new Array(this.n + 1), (val, index) => index);
+        }, {
+            immediate: true
+        });
+
+        vm.unwatchNFuncA = vm.$watch('a',function(newA,oldA){
+            this.newA = newA;
+            this.oldA = oldA;
+        })
+    </script>
+</body>
+</html>

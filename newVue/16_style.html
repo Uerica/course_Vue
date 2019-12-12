@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>style</title>
+</head>
+<body>
+    <div id="app">
+        <button @click='fontSize += 1'>++</button>
+        <button @click='fontSize -= 1'>--</button>
+        <p :style='objStyle'>Hello Wlord</p>
+        <span :style="[fontStyleObj,backgroundStyleObj]">嗨~~這是用陣列裡面放物件寫都~~</span>
+        <div v-bind:style="{ display: ['flex', '-webkit-box', '-ms-flexbox'] }">flexbox在不同瀏覽器相容寫法</div>
+        <!-- 而如果設定的 CSS 屬性在每個瀏覽器的值不同，在 Value 的地方可以使用陣列寫出不同瀏覽器上的屬性值， Vue.js 會從最後一個開始驗證是否可以用在目前的瀏覽器上，找到的話就用此屬性設定樣式。 -->
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                fontSize: 10,
+                fontWeight: 'bold',
+
+                fontStyleObj:{
+                    color: 'red',
+                    fontStyle: 'italic'
+                },
+                backgroundStyleObj:{
+                    background: 'blue'
+                },        
+            },
+            computed:{
+                objStyle(){
+                    return{
+                        fontSize:`${this.fontSize}px`,
+                        fontWeight: this.fontWeight
+                    };
+                }
+            },
+        })
+        //使用 Vue.js 綁定 Style 時，
+        //Vue 會幫忙把 -webkit- 、 -moz- ... 等特定瀏覽器的特殊屬性所需的前綴字加上
+    </script>
+</body>
+</html>

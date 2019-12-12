@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>watch 監聽器</title>
+    <style>
+    h3{
+        color:#abc;
+    }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <h3>watch A</h3>
+            <button @click="unwatchNFuncA">停止watch</button>
+            <button @click = "a++">A++</button>
+            <button @click = "a--">A--</button>
+            <p>a:{{a}}</p>
+            <p>改變後: {{newA}}</p>
+            <p>改變前: {{oldA}}</p>
+        <div>
+        <div>
+            <h3>b.c.d物件 watch D</h3>
+            <button @click="b.c.d++">D++</button>
+            <button @click="b.c.d--">D--</button>
+            <p>b.c.d: {{b.c.d}}</p>
+            <p>改變後: {{newD}}</p>
+            <p>改變前: {{oldD}}</p>
+        </div>
+        <div>
+            <h3>b.c.e物件 watch B物件</h3>
+            <button @click="b.c.e++">E++</button>
+            <button @click="b.c.e--">E--</button>
+            <p>b.c.e: {{b.c.e}}</p>
+            <p>B物件改變後: {{newB}}</p>
+            <p>B物件改變前: {{oldB}}</p>
+        </div>
+        <div>
+            <h3>F+G = watch FG和</h3>
+            <div>
+                <p>f: {{f}}</p>
+                <button @click="f++">F++</button>
+                <button @click="f--">F--</button>
+            </div>
+            <div>
+                <p>g: {{g}}</p>
+                <button @click="g++">G++</button>
+                <button @click="g--">G--</button>
+            </div>
+                <p>f + g: {{fPlusg}}</p>
+            </div>
+        </div>
+        <div>
+            <h3>初始化時較用監聽器 原本寫在created中</h3>
+            <div>
+                <button @click="unwatchNFunc">停止watch n</button>
+                <p>n: {{n}}</p>
+                <button @click="n++">N++</button>
+                <button @click="n--">N--</button>
+            </div>
+            <p>zeroToNArr: {{zeroToNArr}}</p>
+        </div>
+            <div>
+                <p> z: {{z}}</p>
+                <button @click="z++">+</button>
+                <button @click="z--">-</button>
+                <p> z minus: {{zMinus}}</p>
+                <p> z plus: {{zPlus}}</p>         
+            </div>
+
+    </div>
+   
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1,
+                newA: 0,
+                oldA: 0,
+                b:{
+                    c:{
+                        d:1,
+                        e:1,
+                    }
+                },
+                newD: 0,
+                oldD: 0,     
+                newB: {},
+                oldB: {},
+                
+                f: 1,
+                g: 1,
+                fPlusg: 0,
+
+                n: 10,
+                zeroToNArr: [], //如果不加created, 初始化會是[]
+                unwatchNFunc: () => {}, //立即執行
+                unwatchNFuncA: () => {}, //立即執行
+
+                z: 1,
+                zMinus: 0,
+                zPlus: 0,
+            },
+            watch: { //watch:{key:value}
+                // 'a':function(newA,oldA){ //vue watch的寫法
+                //     this.newA = newA;
+                //     this.oldA = oldA;
+                // },
+                'a':'aWatchFn',//將函數寫在methods裡,但一定要是字串型式
+                'b.c.d':function(newD,oldD){ //watch B物件裡層的D
+                    this.newD = newD;
+                    this.oldD = oldD;
+                },
+                //handler,deep,immediate
+                b:{ //deep寫法
+                    handler:function(newB, oldB) {
+                    this.newB = newB;
+                    this.oldB = oldB;
+                    },
+                    deep: true //打開才會去找物件下方的物件
+                },
+                // n:{ //immediate寫法
+                //     handler:function() {
+                //     this.zeroToNArr = Array.from(new Array(this.n + 1), (val, index) => index);
+                //     },
+                //     immediate: true
+                // },
+                //function寫法
+                fPlusgcomputed:function(fPlusg){
+                    this.fPlusg = fPlusg;
+                },
+                z:[
+                    {
+                        handler: function(newVal){
+                           this.zMinus = newVal - 1
+                        }
+                    },
+                    {
+                        handler: function(newVal){
+                           this.zPlus = newVal + 1
+                        }
+                    }
+                ]
+            },
+            methods:{
+                aWatchFn(newA,oldA){
+                    this.newA = newA;
+                    this.oldA = oldA;
+                },
+            },
+            computed:{
+                fPlusgcomputed(){
+                    return this.f + this.g;
+                }
+            },
+            //使用 watch 無法註銷監聽器，如果要在選項中註銷監聽器可以在 created 中使用 $watch 。
+            created() {
+                this.unwatchNFunc = this.$watch('n', function() {
+                this.zeroToNArr = Array.from(new Array(this.n + 1), (val, index) => index);
+                }, {
+                immediate: true
+                });
+            }
+        });
+    </script>
+</body>
+</html>
