@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>set arr</title>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in arr">{{item}}</li>
+        </ul>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                arr:['a','b','c'],
+            },
+            methods:{
+                pushk(){
+                this.arr.push('k')
+                },
+                // filterArr(){
+                //     this.arr.filter(item => {return item !== 'c'});
+                // }
+            }
+        });
+        //當 set 的第一個參數是陣列時，第二個參數就會變為欲修改元素的 index
+        vm.$set(vm.arr, 0, 'j');
+
+        //Vue 封裝了幾個 mutation methods 結果會響應
+        //push(),pop(),shift(),unshift(),splice(),sort(),reverse()
+        //filter沒有封裝所以不能響應結果
+        vm.arr = vm.arr.filter((item) => {return item !== 'c'});
+    </script>
+</body>
+</html>

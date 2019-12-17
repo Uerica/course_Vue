@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>set新增物件屬性, 建立get,set</title>
+</head>
+<body>
+    <div id="app">
+        <p>firstName:{{user.firstName}}</p><p>lastName:{{user.lastName}}</p>
+        <ul>
+            <li v-for="(value, key) in info">{{key}} : {{value}}</li>
+        </ul>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                user:{
+                    firstName:'RouRou',
+                },
+            },
+            created(){
+                //this.user.lastName = 'Wang'; //沒有get, set, 所以無法觸發監聽器發生畫面渲染
+                //使用set(target,key,value) 建立getter setter
+                this.$set(this.user,'lastName','Wang');
+                
+                //使用Object.assign建立多物件
+                // Object.assign(this.info, {lastName: 'Wang', account: 'QuQu3598768'}); // not reactive
+                this.info = Object.assign(
+                    {}, this.info, {lastName: 'Wang', account: 'QuQu3598768'}
+                );
+
+            }
+        })
+    </script>
+</body>
+</html>

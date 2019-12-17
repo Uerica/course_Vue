@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>new Vue</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="a+=1">a++</button>
+        <p>a++按下去資料就會更新且畫面會渲染, 是因為a有去喚醒data中的setter, 並通知監聽器畫面渲染, 而b這時也會跟著改變, 因為畫面更新vue會抓取新資料</p>
+        <p>a:{{a}}</p>
+        <p>B++點下去後資料其實已經被更新, 但因為data中沒有綁定b, 當初getter,setter沒被建立, 所以也無法喚醒setter來通知監聽器畫面被渲染</p>
+        <button @click="b+=1">B++</button>
+        <button @click="plusB">b++</button>
+        <p>b:{{b}}</p>
+        <p>在input表中輸入值都不會改變, 因為vue很聰明會去判斷DOM有沒有被改變</p>
+        <input type="text">
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1,
+            },
+            //b 的數值雖然更新了，但沒有觸發到監聽器
+            created(){
+                this.b = 1;
+            },
+            //forceUpdate強迫畫面更新
+            methods:{
+                plusB(){
+                this.b += 1;
+                this.$forceUpdate();
+                },
+            }
+        });
+    </script>
+</body>
+</html>

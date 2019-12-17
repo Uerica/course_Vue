@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>事件處理</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 此處使用js陳述式, 直接寫js code -->
+        <button @click="a += 1;b *= 2;">a++,b*2--陳述式</button>
+        <!-- 此處使用方法 -->
+        <button @click="aPlusAndbDouble">a++,b*2--方法</button>
+        <p>{{a}}:{{b}}</p>
+
+        <div>
+            <!-- 使用JavaScript 陳述式設定叫用的方法 -->
+            <!-- 當你需要原生的 DOM 事件物件時，可以用 $event 當作參數傳入方法中 -->
+            <button @click="clickWhat('hi', $event)">hi</button>
+            <button @click="clickWhat('yo', $event)">yo</button>
+            You click {{what}} {{tag}}
+        </div>
+        <div>
+            <!-- 物件綁定的方式可以在同個屬性上綁定多個事件，但這些物件都只能用事件名稱設定 -->
+            <!-- 以 Key 為欲綁定的事件名稱， Value 為觸發事件時想要叫用的方法名稱。 -->
+            <!-- 物件的設定方式不能使用簡寫的 @  -->
+            <button v-on="{ mousedown: showDown, mouseup: showUp }">click me</button>
+            {{doWhat}}
+        </div>
+        <form @submit.prevent>
+            <button type="submit">submit</button>
+        </form>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                a: 1,
+                b: 2,
+                what: '',
+                tag: '',
+                doWhat: ''
+            },
+            methods:{
+                aPlusAndbDouble:function(event){
+                    this.a += 1;
+                    this.b *= 2;
+                    console.log(`You clicked ${event.target.tagName}`);
+                },
+                clickWhat: function(what, event) {
+                    this.what = what;
+                    this.tag = event.target.tagName;
+                },
+                showUp: function(event) {
+                    this.doWhat = `up ${event.target.tagName}`;
+                },
+                showDown: function(event) {
+                    this.doWhat = `down ${event.target.tagName}`;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
