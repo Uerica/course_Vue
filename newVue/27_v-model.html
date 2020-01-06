@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>v-model 表單綁定</title>
+</head>
+<body>
+    <div id="app">
+        <p>Text</p>
+        <button @click="msg=''">Clear</button>
+        <input placeholder="Edit" v-model="msg"> {{msg}}
+        <!-- 原本值寫在value中, 使用v-model後初始值須寫再data -->
+        <input placeholder="Edit" value="initial"> {{msg}}
+
+        <p>Multiple Text</p>
+        <textarea placeholder="Edit" v-model="msgarea"></textarea>
+        <p>{{msgarea}}</p>
+        <button @click="msgarea=''">Clear</button>
+
+        <p>使用 IME 輸入</p>
+        <span>中文的嗨就需要鍵入ㄏㄞˋ後按下 Enter 鍵才會輸入， v-model 並不會在拼音時就更新資料，而是會在按下 Enter 後才更新，因此如果想要讓資料響應拼音，可以直接使用 input 事件實作。</span>
+        <div>
+            <button @click="msg2=''">Clear</button>
+            <input placeholder="Use IME" :value="msg2" @input="msg2=$event.target.value"> {{msg2}}
+        </div>
+
+        <p>Checkbox</p>
+        <input type="checkbox" id="checkbox" v-model="checked">
+        <label for="checkbox">{{ checked }}</label>
+
+        <p>Multiple Checkbox</p>
+        <div>
+            <div>What are you learning? {{multipleChecked}}</div>
+            <input type="checkbox" id="vue" value="Vue" v-model="multipleChecked">
+            <label for="vue">Vue</label>
+            <br/>
+            <input type="checkbox" id="react" value="React" v-model="multipleChecked">
+            <label for="react">React</label>
+            <br/>
+            <input type="checkbox" id="angular" value="Angular" v-model="multipleChecked">
+            <label for="angular">Angular</label>
+            <br/>
+        </div>
+
+        <p>Radio</p>
+        <div>
+            <div>Are you learning Vue ? {{isLearningVue}}</div>
+            <input type="radio" id="yes" value="Yes" v-model="isLearningVue">
+            <label for="yes">Yes</label>
+            <input type="radio" id="no" value="No" v-model="isLearningVue">
+            <label for="no">No</label>
+            <br/>
+        </div>
+
+        <p>Select</p>
+        <div>
+            <div>What are you select? {{selected}}</div>
+            <select v-model="selected">
+                <option disabled value="">Please select one</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+            <br/>
+        </div>
+
+        <p>Multiple Select</p>
+        <div>
+            <div>What are you select? {{multipleSelected}}</div>
+            <select v-model="multipleSelected" multiple>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+            <br/>
+        </div>
+
+        <p>v-for設置選項</p>
+        <h2>options render by v-for</h2>
+        <div>
+            <div>What are you select? {{forselect}}</div>
+            <select v-model="forselect">
+            <option v-for="option in options" :value="option.value">{{option.text}}</option>
+            </select>
+            <br/>
+        </div>
+
+        <p>選項數值綁定</p>
+        <h2>Checkbox Value Binding</h2>
+        <div>
+            <input type="checkbox" id="checkboxvaluebinding" v-model="checked" :true-value="yes" :false-value="no">
+            <label for="checkboxvaluebinding">{{ checked }}</label>
+        </div>
+
+        <h2>Radio Value Binding</h2>
+        <div>
+            <div>{{helloOrBye}}</div>
+            <input type="radio" id="radiovalueyes" :value="yes" v-model="helloOrBye">
+            <label for="radiovalueyes">Yes</label>
+            <input type="radio" id="radiovalueno" :value="no" v-model="helloOrBye">
+            <label for="radiovalueno">No</label>
+        </div>
+
+        <h2>Select Value Binding</h2>
+        <div>
+            <div>What are you select? {{selected}}</div>
+            <select v-model="selected">
+                <option disabled value="">Please select one</option>
+                <option :value="yes">{{yes}}</option>
+                <option :value="no">{{no}}</option>
+            </select>
+            <br/>
+        </div>
+
+        <h2>.lazy 離開輸入框才出現</h2>
+        <p>{{lazy}}</p>
+        <input placeholder="lazy" v-model.lazy="lazy">
+        <input placeholder="normal" v-model.normal="lazy">
+
+        <h2>.number 數字型態</h2>
+        <p>{{typeof number}}</p>
+        <input v-model.number="number" type="number">
+        <input v-model="number" type="number">
+
+        <h2>.trim 去除頭尾空白</h2>
+        {{trim}}
+        <input v-model.trim="trim">
+
+        
+
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                msg:'',
+                msgarea:'',
+                msg2: '',
+                checked:true,
+                multipleChecked:[],
+                isLearningVue:'',
+                selected:'',
+                multipleSelected:[],
+                options: [
+                    {value: 'A', text: 'A'},
+                    {value: 'B', text: 'B'},
+                    {value: 'C', text: 'C'}
+                    ],
+                    forselect: 'A',
+                    checked: '打勾瞜',
+                    yes: '打勾瞜',
+                    no: '沒有瞜',
+                    helloOrBye: '打勾瞜',
+                    selected: '',
+                    lazy: '',
+                    number: 0,
+                    trim: ''
+
+            }
+        })
+    </script>
+</body>
+</html>
