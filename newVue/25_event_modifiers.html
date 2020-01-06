@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>event modifiers</title>
+</head>
+<body>
+    <div id="app">
+        <p>原始</p>
+        <div @click="outer">
+            <div @click="middle">
+                <button @click="inner">按我</button>
+            </div>
+        </div>
+        <p>.stop：等同於event.stopPropagation()，防止事件冒泡。</p>
+        <div @click="outer">
+            <div @click="middle">
+                <button @click.stop="inner">按我</button>
+            </div>
+        </div>
+        <hr>
+
+        <p>原始</p>
+        <input type="checkbox" value="Bike"> I have a checkbox<br>
+        <p>.prevent 修飾符會叫用 event.preventDefault() ，preventDefault 會停止瀏覽器的預設行為，像是 checkbox 的勾選/取消勾選行為、 form 的 submit 送出表單行為都會因為 preventDefault 而沒有觸發。</p>
+        <input type="checkbox" value="Bike" @click.prevent> I have a checkbox<br>
+        <hr>
+
+        <p>原始</p>
+        <div @click="outer">
+            <div @click="middle">
+                <button @click="inner">按我</button>
+            </div>
+        </div>
+        <p>.capture 不管觸發事件的 DOM 元素是誰，使用 .capture 修飾符的事件會優先觸發，打破由內往外的規則</p>
+        <div @click="outer">
+            <div @click.capture="middle">
+                <button @click="inner">按我</button>
+            </div>
+        </div>
+        <hr>
+
+        <p>原始</p>
+        <div style="border:3px #FFAC55 solid; padding:5px;" @click="outer">
+            <div style="border:2px rgb(243, 62, 71) solid;" @click="middle">
+                <button @click="inner">按我</button>
+            </div>
+        </div>
+        <p>.self 修飾符使事件的觸發限制在只有自己觸發的時候在會叫用，由其他元素所觸發的事件都不會叫用此方法。</p>
+        <div style="border:3px #FFAC55 solid; padding:5px;" @click="outer">
+            <div style="border:2px rgb(243, 62, 71) solid;" @click.self="middle">
+                <button @click="inner">按我</button>
+            </div>
+        </div>
+
+        <p>在設定修飾符時要注意排序，排序在前的修飾符會先被建立，因此觸發的效果也會有先後</p>
+        
+        <p>.once 修飾符使事件只會觸發一次。</p>
+        <div @click="outer">
+            <div @click="middle">
+                <button @click.once="inner">按我</button>
+            </div>
+        </div>
+
+        <p>.prevent 修飾符會叫用 event.preventDefault() ，preventDefault 會停止瀏覽器的預設行為，像是 checkbox 的勾選/取消勾選行為、 form 的 submit 送出表單行為都會因為 preventDefault 而沒有觸發。</p>
+        <input type="checkbox" value="Bike" @click.prevent> I have a checkbox<br>
+        <p>.passive 修飾符會無視 event.preventDefault() 的功能，因此只要加上此修飾符就一定會觸發瀏覽器的預設行為。</p>
+        <input type="checkbox" value="Bike" @click.prevent.passive> I have a checkbox<br>
+        <hr>
+
+    </div>
+
+    <script>
+       var vm = new Vue({
+                el: '#app',
+                methods: {
+                    inner() {
+                    alert('這是裡面的 button');
+                    },
+                    middle() {
+                    alert('這是中間的 div');
+                    },
+                    outer() {
+                    alert('這是外面的 div');
+                    },
+                }
+            });
+    </script>
+</body>
+</html>

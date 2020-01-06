@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>event modifiers</title>
+</head>
+<body>
+    <div id="app">
+        <p>原始</p>
+        <input @keyup.13="what='keyup.13'" />
+        <span>You trigger event by <strong>{{what}}</strong></span>
+
+        <p>vue 別名</p>
+        <p>別名有 .enter .tab .delete (Delete 跟 Backspace 按鈕都會觸發) .esc .space .up .down .left .right</p>
+        <input @keyup.enter="what='keyup.enter'" />
+        <span>You trigger event by <strong>{{what}}</strong></span>
+
+        <p>客製別名</p>
+        <p>除了官方提供的別名外， Vue.js 也提供可以自訂義別名的功能。在 Vue.config.KeyCodes 物件中設定自定義的別名:</p>
+        <input @keyup.f1="what='keyup.f1'" @keyup.up="what='keyup.up'" @keyup.insert-mode="what='keyup.insert-mode'" />
+        <span>You trigger event by <strong>{{what}}</strong></span>
+        
+        <p>系統修飾建</p>
+        <p>除了一般的按鍵，我們也可以在修飾符上設定系統按鈕，跟一般的按鈕一起設定可以用相黏鍵的方式觸發。下面的例子按下 Alt + c 或是按住 Ctrl 同時點擊輸入框觸發事件:</p>
+        <input @keyup.alt.67="what='keyup.alt.67'" @click.ctrl="what='click.ctrl'"/>
+        <span>You trigger event by <strong>{{what}}</strong></span>
+
+        <p>.exact修飾符</p>
+        <p>設定 .exact 修飾符代表一定要完全符合修飾符的設定才會觸發事件，如下所示</p>
+        <button
+            @click.ctrl="what='click.ctrl'" >click me</button>
+            <!-- @click.ctrl.exact="what='click.ctrl.exact'" -->
+            <!-- @click.exact="what='click.exact'" -->
+            <!-- @click="what='click'" -->
+        <span>You trigger event by <strong>{{what}}</strong></span>
+
+        <p>滑鼠按鍵修飾符</p>
+        <div id="app">
+        <button
+            @click.left="what='click.left'"
+            @click.middle="what='click.middle'"
+            @click.right="what='click.right'"
+        >try left, middle and right</button>
+        <span>You trigger event by <strong>{{what}}</strong></span>
+        </div>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                what:'',
+            },
+        });
+        Vue.config.keyCodes = {
+            f1: 112,
+            up: [38, 87],
+            // insertMode: 73, // won't work
+            "insert-mode": 73
+            };
+    </script>
+</body>
+</html>          
