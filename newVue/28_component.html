@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>建立組件 component</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <btn-cou>Hello Click Button</btn-cou>
+            <btn-cou></btn-cou>
+            <btn-cou></btn-cou>
+        </div>
+        <div>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+        </div>
+    </div>
+
+    <h2>Dynamic Components</h2>
+    <div id="app3">
+        <button @click="dynamicComponent='hello'">Hello</button>
+        <button @click="dynamicComponent='bye'">Bye</button>
+        <button @click="dynamicComponent={template: `<p style='color: purple'>Good</p>`}">Good</button>
+        <component :is="dynamicComponent"></component>
+    </div>
+
+    <p>HTML 元素配置限制</p>
+    <span>在像是ul 、ol 、 table 及 select 標籤下會有限制使用的元素，例如table下層就一定要使用tr，可是當你使用組件設定這些下層元素時，會如下面這樣設定:</span>
+        <!-- 會因錯誤標籤, 造成my-row標籤被抬升 -->
+        <table id="app2">
+            <my-row></my-row>
+        </table>
+        <table id="app2">
+            <tr is="my-row"></tr>
+        </table>
+    <script>
+        Vue.component('btn-cou',{
+            //一定要用函數
+            data:function(){
+                return{
+                    count:0
+                }
+            },
+           //任何的 Vue 實體，包括 new Vue 及組件，因為 render 函數使用上的限制，它們的根元素只能有一個，因此如果想要在組件中有兩個以上的元素時，要使用一個包裝用元素包住多個元素才能使用。
+           //<slot> 標籤內的內容是預設值，所以當你的組件內容是空的時候(像是 <btn-cou></btn-cou> )會使用預設的 '點我喔' 字串渲染按紐。
+           template: `
+                        <div>
+                            <p>{{count}}</p>
+                            <button v-on:click="count++">
+                                <slot>
+                                    點我喔
+                                </slot>
+                            </button>
+                        </div>
+                    `
+        });
+
+        //錯誤示範
+        var buttonCounter2Data = { count: 0 }
+        Vue.component('button-counter', {
+            data: function() {
+                return buttonCounter2Data;
+            },
+            template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+        });
+
+        var vm = new Vue({
+            el: '#app'
+        });
+
+        Vue.component('hello', {
+                template: '<p style="color: blue">Hello</p>'
+            });
+        Vue.component('bye', {
+                template: '<p style="color: red">Bye</p>'
+            })
+        var vm3 = new Vue({
+            el: '#app3',
+            data: {
+                dynamicComponent: 'hello'
+            }
+            });
+
+            var vm2 = new Vue({
+                el: '#app2'
+            });
+
+        
+
+    </script>
+</body>
+</html>
