@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <p>這是父件, 在js中的駝峰寫法對應到屬性是-kebab Case寫法</p>
+            <button-counter button-name="Click me"></button-counter>
+        </div>
+        <div>
+            <p>使用v-bind, 隨著input內輸入值產生改變</p>
+            <input v-model='buttonName'>
+            <button-counter :button-name="buttonName"></button-counter>
+        </div>
+        <div>
+            <p>使用v-for帶入屬性</p>
+            <counter v-for="counter in counters"
+                    :title="counter.title"
+                    :plus-btn-name="counter.plusBtnName"
+                    :minus-btn-name="counter.minusBtnName"></counter>
+        </div>
+        <div>
+            <p>使用v-for帶入屬性, 簡化寫法</p>
+            <counter-simple v-for="counter in counters"
+                            :counter="counter"></counter-simple>
+        </div>
+        <div>
+            <p>使用$emit</p>
+            {{count}}
+            <button-counter button-name="Click me" @click-plus="count=$event"></button-counter>
+            <button-counter button-name="Click me" @click-plus="clickPlus"></button-counter>
+        </div>
+        <div>
+            <p>使用v-model</p>
+            <custom-input title="Input Something" v-model="inputSomething"></custom-input>
+            <input v-model="inputSomething">
+            <input :value="inputSomething" @input="inputSomething=$event.target.value">
+            Your input text is: {{inputSomething}}
+        </div>
+
+    </div>
+    
+</body>
+<script>
+    //註冊一個button-counter組件
+    Vue.component('button-counter', {
+        template: `
+            <button @click="clickPlus">
+            {{buttonName}} {{count}} times
+            </button>
+        `,
+        props: ['buttonName'],//在此註冊屬性
+        data: function() {
+            return {
+            count: 0,
+            };
+        },
+        //使用$emit寫法
+        methods: {
+            clickPlus: function() {
+                this.count += 1;
+                this.$emit('click-plus', this.count);
+            }
+        }
+    });
+    //註冊一個counter組件
+    Vue.component('counter', {
+        template: `
+            <div>
+            <h3>{{title}}</h3>
+            <button @click="count+=1">{{plusBtnName}}</button>
+            <button @click="count-=1">{{minusBtnName}}</button>
+            Count: {{count}}
+            <div>
+        `,
+        props: ['title', 'plusBtnName', 'minusBtnName'],
+        data: function() {
+            return {
+            count: 0,
+            };
+        },
+        });
+    //註冊一個counter-simple組件
+    Vue.component('counter-simple', {
+        template: `
+            <div>
+            <h3>{{counter.title}}</h3>
+            <button @click="count+=1">{{counter.plusBtnName}}</button>
+            <button @click="count-=1">{{counter.minusBtnName}}</button>
+            Count: {{count}}
+            <div>
+        `,
+        props: ['counter'],// 簡化為 counter 屬性
+        data: function() {
+            return {
+            count: 0,
+            };
+        },
+    });
+    //註冊一個custom-input組件
+    Vue.component('custom-input', {
+        template: `
+            <div>
+            <h3>{{title}}</h3>
+            <input :value="value"
+                    @input="$emit('input', $event.target.value)">
+            <div>
+        `,
+        props: ['title', 'value'],
+        });
+
+
+    var vm = new Vue({
+        el: '#app',
+        data:{
+            buttonName:'',
+            //以下為counter組件使用
+            counters: [{        
+            title: 'Counter',
+            plusBtnName: '+',
+            minusBtnName: '-'
+            }, {
+            title: 'Counter',
+            plusBtnName: 'Plus',
+            minusBtnName: 'Minus'
+            }, {
+            title: '計數器',
+            plusBtnName: '加',
+            minusBtnName: '減'
+            }],
+            count: 0,
+        },
+        methods: {
+            clickPlus(count) {
+                this.count = count
+            }
+        }
+    });
+
+</script>
+</html>
